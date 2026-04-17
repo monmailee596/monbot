@@ -1,13 +1,10 @@
-
-
-
 import discord
 from discord import app_commands
 import os
 
 # CONFIGURATION
 TOKEN = os.getenv('DISCORD_TOKEN')
-TON_ID = 1287493067271835740  # Ton ID Discord
+TON_ID = 1287493067271835740  # Ton ID Discord (tu reçois les MP ici)
 
 class Bot(discord.Client):
     def __init__(self):
