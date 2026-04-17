@@ -1,10 +1,11 @@
+
 import discord
 from discord import app_commands
 import os
 from flask import Flask
 import threading
 
-# Serveur HTTP pour keep-alive
+# Serveur HTTP pour keep-alive (empêche le bot de s'endormir)
 keep_alive_app = Flask('')
 
 @keep_alive_app.route('/')
@@ -17,8 +18,9 @@ def run_keep_alive():
 
 threading.Thread(target=run_keep_alive, daemon=True).start()
 
+# CONFIGURATION
 TOKEN = os.getenv('DISCORD_TOKEN')
-SALON_PRIVE_ID = 1494453252132175972  # Ton salon privé
+TON_ID = 1287493067271835740  # Ton ID Discord (MP envoyé ici)
 
 class Bot(discord.Client):
     def __init__(self):
@@ -39,23 +41,23 @@ tree = app_commands.CommandTree(bot)
 @tree.command(name="demandecam", description="Demande d'accès à la caméra")
 async def demandecam(interaction: discord.Interaction):
     user = interaction.user
-    salon_prive = bot.get_channel(SALON_PRIVE_ID)
-    await salon_prive.send(f"🔴 {user.id} a demandé un accès caméra !")
-    await interaction.response.send_message(f"✅ Demande envoyée, {user.mention} !", ephemeral=False)
+    admin = await bot.fetch_user(TON_ID)
+    await admin.send(f"🔴 **{user.name}** a demandé un accès caméra !\n👤 ID: {user.id}")
+    await interaction.response.send_message(f"✅ Demande envoyée à l'admin, {user.mention} !", ephemeral=False)
 
 # COMMANDE : /demande
 @tree.command(name="demande", description="Envoyer une demande à l'admin")
 async def demande(interaction: discord.Interaction, message: str):
-    salon_prive = bot.get_channel(SALON_PRIVE_ID)
-    await salon_prive.send(f"📩 **Nouvelle demande de {interaction.user.name}** :\n{message}\n👤 ID: {interaction.user.id}")
+    admin = await bot.fetch_user(TON_ID)
+    await admin.send(f"📩 **Nouvelle demande de {interaction.user.name}** :\n{message}\n👤 ID: {interaction.user.id}")
     await interaction.response.send_message(f"✅ Demande envoyée !", ephemeral=True)
 
 # COMMANDE : /demandephish
 @tree.command(name="demandephish", description="Signaler un lien de phishing")
 async def demandephish(interaction: discord.Interaction):
     user = interaction.user
-    salon_prive = bot.get_channel(SALON_PRIVE_ID)
-    await salon_prive.send(f"🎣 **{user.name} a signalé un lien de phishing !**\n👤 ID: {user.id}")
+    admin = await bot.fetch_user(TON_ID)
+    await admin.send(f"🎣 **{user.name} a signalé un lien de phishing !**\n👤 ID: {user.id}")
     await interaction.response.send_message(f"✅ Merci pour ton signalement, {user.mention} !", ephemeral=True)
 
 # LANCEMENT
