@@ -1,6 +1,21 @@
 import discord
 from discord import app_commands
 import os
+from flask import Flask
+import threading
+
+# Serveur HTTP pour keep-alive
+keep_alive_app = Flask('')
+
+@keep_alive_app.route('/')
+@keep_alive_app.route('/health')
+def health():
+    return "Bot is alive!", 200
+
+def run_keep_alive():
+    keep_alive_app.run(host='0.0.0.0', port=8080)
+
+threading.Thread(target=run_keep_alive, daemon=True).start()
 
 TOKEN = os.getenv('DISCORD_TOKEN')
 SALON_PRIVE_ID = 1494453252132175972  # Ton salon privé
