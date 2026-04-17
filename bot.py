@@ -1,10 +1,9 @@
 import discord
 from discord import app_commands
-
-# CONFIGURATION
 import os
+
 TOKEN = os.getenv('DISCORD_TOKEN')
-SALON_PRIVE_ID = 1494778076570320936
+SALON_PRIVE_ID = 1494453252132175972  # Ton salon privé
 
 class Bot(discord.Client):
     def __init__(self):
@@ -26,23 +25,21 @@ tree = app_commands.CommandTree(bot)
 async def demandecam(interaction: discord.Interaction):
     user = interaction.user
     salon_prive = bot.get_channel(SALON_PRIVE_ID)
-    
-    await salon_prive.send(f"🔴 <@{user.id}> a demandé un accès caméra !\n📝 Réponds-lui rapidement.")
-    await interaction.response.send_message(f"✅ Ta demande a été envoyée, {user.mention} !", ephemeral=False)
+    await salon_prive.send(f"🔴 {user.id} a demandé un accès caméra !")
+    await interaction.response.send_message(f"✅ Demande envoyée, {user.mention} !", ephemeral=False)
 
 # COMMANDE : /demande
 @tree.command(name="demande", description="Envoyer une demande à l'admin")
 async def demande(interaction: discord.Interaction, message: str):
     salon_prive = bot.get_channel(SALON_PRIVE_ID)
-    
     await salon_prive.send(f"📩 **Nouvelle demande de {interaction.user.name}** :\n{message}\n👤 ID: {interaction.user.id}")
     await interaction.response.send_message(f"✅ Demande envoyée !", ephemeral=True)
-    # COMMANDE : /demandephish
+
+# COMMANDE : /demandephish
 @tree.command(name="demandephish", description="Signaler un lien de phishing")
 async def demandephish(interaction: discord.Interaction):
     user = interaction.user
     salon_prive = bot.get_channel(SALON_PRIVE_ID)
-    
     await salon_prive.send(f"🎣 **{user.name} a signalé un lien de phishing !**\n👤 ID: {user.id}")
     await interaction.response.send_message(f"✅ Merci pour ton signalement, {user.mention} !", ephemeral=True)
 
