@@ -1,26 +1,13 @@
 
+
+
 import discord
 from discord import app_commands
 import os
-from flask import Flask
-import threading
-
-# Serveur HTTP pour keep-alive (empêche le bot de s'endormir)
-keep_alive_app = Flask('')
-
-@keep_alive_app.route('/')
-@keep_alive_app.route('/health')
-def health():
-    return "Bot is alive!", 200
-
-def run_keep_alive():
-    keep_alive_app.run(host='0.0.0.0', port=8080)
-
-threading.Thread(target=run_keep_alive, daemon=True).start()
 
 # CONFIGURATION
 TOKEN = os.getenv('DISCORD_TOKEN')
-TON_ID = 1287493067271835740  # Ton ID Discord (MP envoyé ici)
+TON_ID = 1287493067271835740  # Ton ID Discord
 
 class Bot(discord.Client):
     def __init__(self):
