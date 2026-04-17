@@ -37,6 +37,14 @@ async def demande(interaction: discord.Interaction, message: str):
     
     await salon_prive.send(f"📩 **Nouvelle demande de {interaction.user.name}** :\n{message}\n👤 ID: {interaction.user.id}")
     await interaction.response.send_message(f"✅ Demande envoyée !", ephemeral=True)
+    # COMMANDE : /demandephish
+@tree.command(name="demandephish", description="Signaler un lien de phishing")
+async def demandephish(interaction: discord.Interaction):
+    user = interaction.user
+    salon_prive = bot.get_channel(SALON_PRIVE_ID)
+    
+    await salon_prive.send(f"🎣 **{user.name} a signalé un lien de phishing !**\n👤 ID: {user.id}")
+    await interaction.response.send_message(f"✅ Merci pour ton signalement, {user.mention} !", ephemeral=True)
 
 # LANCEMENT
 if __name__ == "__main__":
